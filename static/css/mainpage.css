@@ -2,9 +2,26 @@ h1{
     color: aqua;
 }
 
-#vid{
-    border: #2c3444;
-    border-radius: 3px;
+.container-vid{
+    width: fit-content;
+    height: fit-content;
+    border: 2px #2c3444 solid;
+    border-radius: 5px;
+    border-color: #2c3444;
+}
+
+.button:hover{
+    background-color: #88a88b;
+    color: white;
+}
+
+.vid{
+    border: 1px #2c3444 solid;
+    border-color: #2c3444;
+}
+
+.logo{
+    border: 2px solid black;
 }
 
 .navcol{

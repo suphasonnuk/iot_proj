@@ -27,10 +27,22 @@ def generate_frames():
         yield(b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-@app.route('/')
+@app.route('/' )
 def index():
     return render_template("index.html")
 
+@app.route('/home/' , methods = ['POST' , 'GET'])
+def home():
+    return redirect(url_for("index"))
+
+@app.route('/history/' , methods = ['POST'])
+def history():
+    return render_template("history.html")
+
+
+@app.route('/que/', methods = ['POST' , 'GET'])
+def que():
+    return render_template("que.html")
 
 
 @app.route('/video')
