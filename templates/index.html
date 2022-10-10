@@ -75,24 +75,20 @@
      </div>
 
           <div class="row">
-              <div class="form-floating col">
-                <form>
-                  <label for= "user_name">   Name </label>
+            <form class="form-floating col" method="post">
                   <input class="form-control form-control-md " type="text" placeholder="name" id = "user_name">
-                </form>
-              </div>
-        
-              <div class="form-floating  col">
-                <form>
-                  <label for = "user_id">   Id </label>
+                  <label class="mx-2" for= "user_name"> Name </label>
+            </form>
+
+            <form class="form-floating  col" method="post">
                   <input class="form-control form-control-md" type="text" placeholder="Id" id = "user_id">
+                  <label class="mx-2" for = "user_id"> Id </label>
                   <br>
-                </form>
-              </div>
+            </form>
 
           </div>
             <div class="col-md">
-              <form>
+              <form method="post">
               <div class="form-floating">
                 <select class="form-select" id="floatingSelectGrid">
                   <option selected>Select your Year: </option>
@@ -106,11 +102,11 @@
               </div>
             </form>
 
-              <div class="form-floating m-3">
-                <input class="p-2 form-control form-control-sm" type="time" placeholder="time" id = "user_time">
-                <label for = "user_time"> Expected Time </label>
-                <br>
-            </div>
+            <form method="post" class="form-floating mt-3 pt-2">
+                  <input class="p-2 form-control form-control-sm" type="datetime-local" placeholder="time" id = "user_time">
+                  <label for = "user_time"> Expected Time </label>
+                  <br>
+            </form>
 
             <input class="btn btn-outline-success m-3 p-3" type="submit">
         </form>
