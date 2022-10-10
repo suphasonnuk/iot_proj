@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from flask import Flask
 import pandas as pd
-from flask import url_for, redirect, render_template, Response
+from flask import url_for, redirect, render_template, Response , request , session
 import cv2
 
 app = Flask(__name__)
@@ -49,8 +49,12 @@ def que():
 def video():
     return Response(generate_frames() , mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
-
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        session['username'] = request.form['user_name']
+        session['id'] = request.form['user_id']
+        session['time'] = request.form['time']
 
 if __name__ == "__main__":
     app.run(debug=True)

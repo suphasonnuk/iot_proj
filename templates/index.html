@@ -74,21 +74,25 @@
         </div>
      </div>
 
-        <form>
           <div class="row">
-            <div class="form-floating col">
-                <input class="form-control form-control-sm " type="text" placeholder="name" id = "user_name">
-                <label for= "user_name">   Name </label>
-            </div>
+              <div class="form-floating col">
+                <form>
+                  <label for= "user_name">   Name </label>
+                  <input class="form-control form-control-md " type="text" placeholder="name" id = "user_name">
+                </form>
+              </div>
+        
+              <div class="form-floating  col">
+                <form>
+                  <label for = "user_id">   Id </label>
+                  <input class="form-control form-control-md" type="text" placeholder="Id" id = "user_id">
+                  <br>
+                </form>
+              </div>
 
-            <div class="form-floating  col">
-                <input class="form-control form-control-sm" type="text" placeholder="Id" id = "user_id">
-                <label for = "user_id">   Id </label>
-                <br>
-            </div>
           </div>
-
             <div class="col-md">
+              <form>
               <div class="form-floating">
                 <select class="form-select" id="floatingSelectGrid">
                   <option selected>Select your Year: </option>
@@ -100,6 +104,7 @@
 
                 <label for="floatingSelectGrid">Years</label>
               </div>
+            </form>
 
               <div class="form-floating m-3">
                 <input class="p-2 form-control form-control-sm" type="time" placeholder="time" id = "user_time">
@@ -114,7 +119,12 @@
         
 
     </div>
-
+    <!-- <footer class="bg-light text-center text-lg-start">
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2022 Copyright owned by IOT:
+        <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+      </div>
+    </footer> -->
 </body>
 
 </html>
