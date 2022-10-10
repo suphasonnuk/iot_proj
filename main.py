@@ -35,7 +35,7 @@ def index():
 def home():
     return redirect(url_for("index"))
 
-@app.route('/history/' , methods = ['POST'])
+@app.route('/history/' , methods = ['POST' , 'GET'])
 def history():
     return render_template("history.html")
 
