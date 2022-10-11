@@ -2,6 +2,16 @@ h1{
     color: aqua;
 }
 
+p{
+    color: burlywood;
+    text-size-adjust: 100%;
+    text-align: center;
+}
+
+.sad{
+    color: whitesmoke;
+}
+
 .container-vid{
     width: fit-content;
     height: fit-content;

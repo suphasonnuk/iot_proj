@@ -1,3 +1,4 @@
+from time import time
 from django.shortcuts import render
 from flask import Flask
 import pandas as pd
@@ -10,6 +11,12 @@ camera = cv2.VideoCapture(0)
 camera.set(3,480)
 camera.set(4,520)
 camera.set(10,1000)
+
+user_name = ""
+user_id = ""
+years = 0
+time_expected = ""
+visiblility = ""
 
 def generate_frames():
     while True:
@@ -29,7 +36,7 @@ def generate_frames():
 
 @app.route('/' )
 def index():
-    return render_template("index.html")
+    return render_template("index.html" , id_visible = "hidden")
 
 @app.route('/home/' , methods = ['POST' , 'GET'])
 def home():
@@ -49,12 +56,18 @@ def que():
 def video():
     return Response(generate_frames() , mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
+    global user_id, user_name , time_expected , years , visiblility
     if request.method == 'POST':
-        session['username'] = request.form['user_name']
-        session['id'] = request.form['user_id']
-        session['time'] = request.form['time']
+        user_name = request.form.get('user_name')
+        user_id = request.form.get('user_id')
+        years = request.form.get('years')
+        time_expected = request.form.get('user_time')
+        visiblility = "hidden"
+        face_visibility = visiblility
+
+        return render_template("index.html" , name = user_name , id = user_id , year = years ,time = time_expected , visible = face_visibility , id_visible = "")
 
 if __name__ == "__main__":
     app.run(debug=True)
