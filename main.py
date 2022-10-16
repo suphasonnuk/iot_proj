@@ -34,13 +34,17 @@ def generate_frames():
         yield(b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-@app.route('/' )
+@app.route('/')
 def index():
-    return render_template("index.html" , id_visible = "hidden")
+    return render_template("front.html" , id_visible = "hidden")
 
 @app.route('/home/' , methods = ['POST' , 'GET'])
 def home():
     return redirect(url_for("index"))
+
+@app.route('/main/' , methods = ['POST' , 'GET'])
+def main():
+    return render_template("index.html" , id_visible = "hidden")
 
 @app.route('/history/' , methods = ['POST' , 'GET'])
 def history():
