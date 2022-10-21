@@ -7,11 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}">
 
-    <title>
-        Intro Page
-    </title>
-
+    <title> Error </title>
 </head>
+
 
 <body class="text-center">
     <nav class="navbar navbar-expand-lg">
@@ -56,28 +54,23 @@
         </div>
       </nav>
 
-    <div class="container-lg center-screen text-center pb-5">
 
-        <h2 class= "text-center font-weight-bold"> Welcome </h2>
-      <div class="container-md mt-3 rounded">
-          <form action="{{url_for('login_page')}}">
-             <button class="btn btn-primary px-5"> login </button>
-          </form>
-      </div>  
+    <div    class="container-md mt-auto center-screen pb-5">
 
-      <div>
-        <form action = "{{url_for('registering')}}">
-          <button class="btn btn-secondary px-3 mt-3"> Register (First time use) </button>
-          </form>
-      </div>
+        <h2> Error , You have to log in first </h2>
 
-        <div class="container-md mt-3 mb-3 rounded px-3">
-            <form action="{{url_for('que')}}">
-               <button class="btn btn-success"> See Activities log (For admin) </button>
+        <div class="container-sm">
+            <form action = "{{url_for('login_page')}}">
+                <button class="btn btn-primary mx-3"> log in </button>
             </form>
-        </div>  
+
+        </div>
+
+
     </div>
 
+
 </body>
+
 
 </html>

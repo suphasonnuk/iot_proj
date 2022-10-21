@@ -3,6 +3,7 @@ from django.shortcuts import render
 from flask import Flask
 import datetime, time
 import pandas as pd
+import numpy as np
 from flask import url_for, redirect, render_template, Response , request , session
 import cv2
 import os
@@ -119,7 +120,7 @@ def index():
 
 @app.route('/registering/')
 def registering():
-    return render_template("register.html")
+    return render_template("main_page/register.html")
 
 @app.route('/register/' , methods  = ['POST' , 'GET'])
 def register():
@@ -131,7 +132,7 @@ def register():
         time_expected = request.form.get('user_time')
         user_email = request.form.get('user_email') 
         visiblility = "hidden"
-    return render_template("register.html")
+    return render_template("main_page/register.html")
 
 
 @app.route('/home/' , methods = ['POST' , 'GET'])
@@ -140,23 +141,23 @@ def home():
 
 @app.route('/main/' , methods = ['POST' , 'GET'])
 def main():
-    return render_template("index.html" , id_visible = "hidden")
+    return render_template("main_page/index.html" , id_visible = "hidden")
 
 @app.route('/history/' , methods = ['POST' , 'GET'])
 def history():
     if (_login):
-        return render_template("history.html")
+        return render_template("main_page/history.html")
     else:
-        return render_template("login.html")
+        return render_template("login_error.html")
 
 
 @app.route('/que/', methods = ['POST' , 'GET'])
 def que():
     if (_login):
         if (admin):
-            return render_template("que.html")     
+            return render_template("main_page/que.html")     
     else:
-        return render_template("login.html")
+        return render_template("login_error.html")
 
 
 @app.route('/video')
@@ -181,9 +182,9 @@ def login():
 def login_page():
     if (_login):
 
-        return render_template("Dashboard.html" , user_name = user_name , user_id = user_id)     
+        return render_template("main_page/Dashboard.html" , user_name = user_name , user_id = user_id)     
     else:
-        return render_template("login.html")
+        return render_template("main_page/login.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
