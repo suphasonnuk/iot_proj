@@ -8,6 +8,12 @@ p{
     text-align: center;
 }
 
+#lab_pict{
+    border: 2px #2c3444 solid;
+    border-radius: 2px;
+    border-color: #2c3444;
+}
+
 .center-screen {
     display: flex;
     flex-direction: column;
