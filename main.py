@@ -144,7 +144,10 @@ def main():
 
 @app.route('/history/' , methods = ['POST' , 'GET'])
 def history():
-    return render_template("history.html")
+    if (_login):
+        return render_template("history.html")
+    else:
+        return render_template("login.html")
 
 
 @app.route('/que/', methods = ['POST' , 'GET'])
