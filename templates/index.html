@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body class="text-center">
+    <div id = "names" class = "container-fluid text-center mt-3 p-2">
+
+      <div class="row">
+        
+        <div class="container-sm col m-auto p-3">
+
+         <img class="vid rounded-3 mx-auto d-bloc m-5" src="{{ url_for('video') }}" width="50%"/>
+
+          <button class="button btn btn-outline-secondary"> Capture </button>
+          <br>
+  
+        </div>
+
+
+        <div class="container-sm col m-auto p-2">
+          <p> created <span style="color:cyan "> By </span> </p>
+            <img class="rounded" src="{{url_for('static' , filename = 'img/logo_real.png')}}" width="50%"/>
+        </div>
+     </div>
+     <form method="post" action="/login/" name="login">
+          <div class="row">
+            <div class="form-floating col">
+                  <input class="form-control form-control-md " readonly type="text" placeholder="name" name = "user_name">
+                  <label class="mx-2" for= "user_name"> {{user_name}} </label>
+            </div>
+
+            <div class="form-floating  col">
+                  <input class="form-control form-control-md" readonly type="text" placeholder="Id" name = "user_id">
+                  <label class="mx-2" for = "user_id"> {{user_id}} </label>
+                  <br>
+            </div>
+
+          </div>
+
+            <div class="form-floating mt-3 pt-2">
+                  <input class="p-2 form-control form-control-sm" type="datetime-local" placeholder="time" name = "user_time">
+                  <label for = "user_time"> Expected Time </label>
+                  <br>
+            </div>
+
+            <input class="btn btn-outline-success m-3 p-3" type="submit">
+        </form>
+
+
+        
+
+    </div>
+
+    {%endblock%}

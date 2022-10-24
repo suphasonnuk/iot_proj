@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-md mt-5">
+        <h2>   This is Login page  </h2>
+
+    </div>
+    <div class="container">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ message }}
+      </div>
+      {% endfor %}
+  </div>
+
+    <div class="container-md">
+
+      <img src="{{url_for('static' , filename = 'img/village.png')}}" width="30%"/>
+    </div>
+
+    <div class="container-sm col m-auto p-2">
+      <form method="post" action = '/login/' name = 'login'>
+        <div class="row">
+          <div class="form-floating col mt-3">
+                <input class="form-control form-control-md " type="text" placeholder="name" name = "user_name">
+                <label class="mx-2" for= "user_name"> User Name
+                   </label>
+          </div>
+
+          <div class="form-floating mt-5 mb-3">
+                <input class="form-control form-control-md" type="text" placeholder="99/99 example" name = "user_password">
+                <label class="mx-2" for = "user_id"> Password </label>
+                <br>
+          </div>
+
+          <div class="container-sm">
+            <button class="btn btn-outline-success mb-5 p-3" type="submit"> log in </button>
+          </div>
+    </form>
+
+<div class="container-sm mb-3">
+  <form action = "{{url_for('register')}}">
+    <button class="btn btn-secondary"> Register </button>
+  </form>
+</div>
+    
+
+</div>
+
+    <div class="row">
+        
+        <div class="col">
+            <form action = '/home/' method="post" name = "home">       
+                <button name = "home" type="submit" class="btn btn-secondary"> &#x2770; HOME </button>
+            </form>
+        </div>
+
+    </div>
+    <!-- <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+          © 2022 Copyright owned by IOT:
+          <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+        </div>
+      </footer> -->
+
+      {% endblock %}
