@@ -24,7 +24,9 @@ global capture,rec_frame, grey, switch, neg, face, rec, out
 
 
 data_use = None
-admin = "suphason"
+_admin = ["suphason" , "nont"]
+
+user_plates = []
 user_email = []
 user_name = []
 error = None
@@ -35,6 +37,11 @@ neg=0
 face=0
 switch=1
 rec=0
+
+plates = pd.DataFrame({
+            "user_name" : user_name,
+            "user_plates" : user_plates,
+        })
 
 data_recieved = pd.DataFrame({
             "user_name" : user_name,
@@ -90,14 +97,41 @@ def register():
 
 @app.route('/logout/' , methods = ['POST' , 'GET'])
 def logout():
-    global _login
-    _login = 0
+    global _login , data_use
+    _login = False
+
+    data_use = None
     return redirect(url_for("login_page"))
 
 
 @app.route('/home/' , methods = ['POST' , 'GET'])
 def home():
     return redirect(url_for("index"))
+
+@app.route('/edit/' , methods = ['POST' , 'GET'])
+def edit():
+    return render_template("admin_edit.html" , personal = data_recieved.values.tolist(), _plates = plates.values.tolist())
+
+
+@app.route('/add_plate/' , methods = ['POST' , 'GET'])
+def add_plate():
+    global plates
+    if request.method == "POST":
+        _plates = pd.DataFrame({
+            "user_name" : [data_use[0][0]],
+            "user_plates" : [request.form.get("add_plate")],
+        })
+
+        if request.form.get("license") not in user_plates:
+            user_plates.append(request.form.get("add_plate"))
+            plates = pd.concat([plates, _plates])
+
+            return render_template("Dashboard.html" , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
+
+        return render_template("Dashboard.html" , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
+
+    else:
+        return render_template("Dashboard.html" , personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
 
 @app.route('/main/' , methods = ['POST' , 'GET'])
 def main():
@@ -111,11 +145,11 @@ def history():
         return render_template("login_error.html")
 
 
-@app.route('/que/', methods = ['POST' , 'GET'])
-def que():
+@app.route('/admin_page/', methods = ['POST' , 'GET'])
+def admin_page():
     if (_login):
-        if (data_use[0][0] == admin):
-            return render_template("que.html")  
+        if (data_use[0][0] in _admin):
+            return render_template("admin_page.html" , personal = data_recieved.values.tolist() , _plates = plates.values.tolist())  
         else:
             return render_template("login_error.html")
     else:
@@ -133,7 +167,8 @@ def login():
         if ( data_use != []):
             flash("log in successful")
             _login = True
-            return render_template("Dashboard.html" , name = user_name , id = user_id , visible = face_visibility , id_visible = "" , personal = data_use[0])
+            return render_template("Dashboard.html" , name = user_name , id = user_id , visible = face_visibility ,
+             id_visible = "" , personal = data_use[0],  _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
         else:
 
             flash("Your user name is not in our DataBase, try again")
@@ -150,7 +185,7 @@ def login_page():
     global user_id, user_name , user_password , years , visiblility , _login
     if (_login):
 
-        return render_template("Dashboard.html" , user_name = user_name , user_id = user_id , personal = data_use[0])     
+        return render_template("Dashboard.html" , user_name = user_name , user_id = user_id , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())     
     else:
         return render_template("login.html")
 

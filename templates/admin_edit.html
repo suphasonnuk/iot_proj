@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container-lg mt-5">
+    <div class="input-group mb-3">
+        <button class="btn btn-outline-danger" type="button" id="button-addon1">Delete Account</button>
+
+
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Select Name</option>
+            {%for data in personal%}
+   
+            <option value="1">{{data[0]}}</option>
+   
+            {%endfor%}
+
+          </select>
+      </div>
+      
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <button class="btn btn-outline-primary" type="button" id="button-addon2">Add Name</button>
+      </div>
+      
+      <div class="input-group mb-3">
+        <button class="btn btn-outline-secondary" type="button">Add License Plate</button>
+        <input type="text" class="form-control" placeholder="" aria-label="Example text with two button addons">
+      </div>
+      
+      <div class="input-group">
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Select Plates</option>
+            {%for data in _plates%}
+   
+            <option value="1">{{data[1]}}</option>
+   
+            {%endfor%}
+
+          </select>
+        <button class="btn btn-outline-danger" type="button">Delete License Plate</button>
+      </div>
+</div>
+{% endblock %}
