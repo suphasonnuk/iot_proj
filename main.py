@@ -26,6 +26,8 @@ global capture,rec_frame, grey, switch, neg, face, rec, out
 data_use = None
 _admin = ["suphason" , "nont"]
 
+license_img = None
+
 user_plates = []
 user_email = []
 user_name = []
@@ -39,6 +41,7 @@ switch=1
 rec=0
 
 plates = pd.DataFrame({
+            "Time added" : current_time,
             "user_name" : user_name,
             "user_plates" : user_plates,
         })
@@ -66,34 +69,61 @@ def registering():
 @app.route('/register/' , methods  = ['POST' , 'GET'])
 def register():
     global user_id, user_name , time_expected , user_password , visiblility ,  user_email , data_recieved
+
     if request.method == 'POST':
 
-        _data_recieved = pd.DataFrame({
-            "user_name" : [request.form.get('user_name')],
-            "user_id" : [request.form.get('user_id')],
-            "user_password" : [request.form.get('user_password')],
-            "user_email" : [request.form.get('user_email')]
-        })
+        if ((request.form.get('user_name') == "") or (request.form.get('user_id') == "") or (request.form.get('user_password') == "") or (request.form.get('user_email') == "")):
+            flash("Please fill out every information before going forward.")
+            return redirect(url_for("registering"))
 
-        if request.form.get('user_name') not in user_name:
-            user_name.append(_data_recieved['user_name'].values[0])
-            user_id.append(_data_recieved['user_name'].values[0])
-            user_password.append(_data_recieved['user_name'].values[0])
-            user_email.append(_data_recieved['user_name'].values[0])
-            visiblility = "hidden"
+        else:
 
-            data_recieved = pd.concat([data_recieved , _data_recieved])
-            return render_template("regis_suc.html")
+            uploaded_file = request.files['user_lisense']
+            if uploaded_file.filename != '':
+                uploaded_file.save( os.path.join("/shorts" , f"{current_time}" + uploaded_file.filename))
+
+            _data_recieved = pd.DataFrame({
+                "user_name" : [request.form.get('user_name')],
+                "user_id" : [request.form.get('user_id')],
+                "user_password" : [request.form.get('user_password')],
+                "user_email" : [request.form.get('user_email')]
+            })
+
+            if request.form.get('user_name') not in user_name:
+                user_name.append(_data_recieved['user_name'].values[0])
+                user_id.append(_data_recieved['user_name'].values[0])
+                user_password.append(_data_recieved['user_name'].values[0])
+                user_email.append(_data_recieved['user_name'].values[0])
+                visiblility = "hidden"
+
+                data_recieved = pd.concat([data_recieved , _data_recieved])
+                return render_template("regis_suc.html")
         
-        
-        else: 
-            flash("This username is already used")
-            return render_template("register.html")
-        
+            
+            else: 
+                flash("This username is already used")
+                return render_template("register.html")
+            
     if request.method == 'GET':
         return render_template("register.html")
 
     return render_template("register.html")
+
+@app.route('/delete_names/' , methods = ['POST' , 'GET'])
+def delete_names():
+    global _login , data_use
+    _login = False
+
+    data_use = None
+    return redirect(url_for("login_page"))
+
+@app.route('/delete_plates/' , methods = ['POST' , 'GET'])
+def delete_plates():
+    global _login , data_use
+    _login = False
+
+    data_use = None
+    return redirect(url_for("login_page"))
 
 @app.route('/logout/' , methods = ['POST' , 'GET'])
 def logout():
@@ -134,17 +164,6 @@ def add_plate():
 
     else:
         return render_template("Dashboard.html" , personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
-
-@app.route('/main/' , methods = ['POST' , 'GET'])
-def main():
-    return render_template("index.html" , id_visible = "hidden")
-
-@app.route('/history/' , methods = ['POST' , 'GET'])
-def history():
-    if (_login):
-        return render_template(" history.html")
-    else:
-        return render_template("login_error.html")
 
 @app.route('/delete_plate/' , methods = ['POST' , 'GET'])
 def delete_plate():
