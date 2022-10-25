@@ -80,7 +80,11 @@ def register():
 
             uploaded_file = request.files['user_lisense']
             if uploaded_file.filename != '':
-                uploaded_file.save( os.path.join("/shorts" , f"{current_time}" + uploaded_file.filename))
+                os.chdir(os.path.join( os.path.join(os.getcwd() , "shots")))
+                ext = os.path.splitext(uploaded_file.filename)[-1].lower()
+                
+                if ext == ".jpg" or ".png":
+                    uploaded_file.save(uploaded_file.filename)
 
             _data_recieved = pd.DataFrame({
                 "user_name" : [request.form.get('user_name')],
