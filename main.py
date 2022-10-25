@@ -122,14 +122,15 @@ def add_plate():
             "user_plates" : [request.form.get("add_plate")],
         })
 
-        if request.form.get("license") not in user_plates:
+        if request.form.get("add_plate") not in plates.loc[plates["user_name"] == data_use[0][0] , "user_plates"].values:
             user_plates.append(request.form.get("add_plate"))
             plates = pd.concat([plates, _plates])
             plates.index = range(len(user_plates))
 
-            return render_template("Dashboard.html" , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
 
-        return render_template("Dashboard.html" , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
+            return render_template("Dashboard.html" , personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
+        flash("You already added that plate")
+        return render_template("Dashboard.html" , personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
 
     else:
         return render_template("Dashboard.html" , personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
@@ -151,6 +152,7 @@ def delete_plate():
     if request.method == "POST": 
         data = request.form.get('delete_plate') 
         plate_seleted = data
+        user_plates.remove(data)
         plates.drop(plates[plates["user_plates"] == plate_seleted].index , inplace=True)
         
         return render_template("Dashboard.html" , user_name = user_name , 
