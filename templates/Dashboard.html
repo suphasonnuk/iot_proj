@@ -55,11 +55,17 @@
           <tr>
             {%for plate in info%}
 
-            <td>{{plate}}</td>
+            <td>{{plate}} </td>
 
             {%endfor%}
+            <td>
+            <form action = '/delete_plate/' method="post" name = "delete_plate">    
+              <p>{{info[1]}}</p>   
+              <button name = "delete_plate" type="submit" class="btn btn-outline-danger" value="{{info[1]}}"> &#x2770; Delete </button>
+          </form>
+        </td>
           </tr>
-        
+
           {%endfor%}
           
         </tbody>

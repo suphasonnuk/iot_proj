@@ -125,6 +125,7 @@ def add_plate():
         if request.form.get("license") not in user_plates:
             user_plates.append(request.form.get("add_plate"))
             plates = pd.concat([plates, _plates])
+            plates.index = range(len(user_plates))
 
             return render_template("Dashboard.html" , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
 
@@ -143,6 +144,22 @@ def history():
         return render_template(" history.html")
     else:
         return render_template("login_error.html")
+
+@app.route('/delete_plate/' , methods = ['POST' , 'GET'])
+def delete_plate():
+
+    if request.method == "POST": 
+        data = request.form.get('delete_plate') 
+        plate_seleted = data
+        plates.drop(plates[plates["user_plates"] == plate_seleted].index , inplace=True)
+        
+        return render_template("Dashboard.html" , user_name = user_name , 
+        user_id = user_id , personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())     
+    else:
+        return render_template("Dashboard.html" , user_name = user_name , user_id = user_id , personal = data_use[0] ,
+         _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())     
+    
+    
 
 
 @app.route('/admin_page/', methods = ['POST' , 'GET'])
