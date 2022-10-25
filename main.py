@@ -41,7 +41,6 @@ switch=1
 rec=0
 
 plates = pd.DataFrame({
-            "Time added" : current_time,
             "user_name" : user_name,
             "user_plates" : user_plates,
         })
