@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-md mt-5">
+        <h2>   This is DashBoard page  </h2>
+
+    </div>
+
+
+    <div class="container">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ message }}
+      </div>
+      {% endfor %}
+  </div>
+
+  <h2> Your information </h2>
+
+    <div class="container-lg">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">House number</th>
+            <th scope="col">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{personal[0]}}</td>
+            <td>{{personal[1]}}</td>
+            <td>{{personal[3]}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+    </div>
+
+    <div class="container-lg">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Time added</th>
+            <th scope="col">User Name</th>
+            <th scope="col">User License Plates</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {%for info in _plates%}
+
+          <tr>
+            {%for plate in info%}
+
+            <td>{{plate}} </td>
+
+            {%endfor%}
+            <td>
+            <form action = '/delete_plate/' method="post" name = "delete_plate">    
+              <p>{{info[1]}}</p>   
+              <button name = "delete_plate" type="submit" class="btn btn-outline-danger" value="{{info[1]}}"> &#x2770; Delete </button>
+          </form>
+        </td>
+          </tr>
+
+          {%endfor%}
+          
+        </tbody>
+      </table>
+
+
+    </div>
+
+
+
+    <div class="row">
+        
+        <div class="col">
+            <form action = '/home/' method="post" name = "home">       
+                <button name = "home" type="submit" class="btn btn-secondary"> &#x2770; HOME </button>
+            </form>
+        </div>
+
+        <div class="col">
+          <form action = '/logout/' method="post" name = "logout">       
+              <button name = "logout" type="submit" class="btn btn-danger"> LOG OUT </button>
+          </form>
+      </div>
+
+        <div class="col"> 
+            <form action = '/admin_page/' method="post" name = "admin_page">       
+                <button name = "admin_page" type="submit" class="btn btn-secondary"> &#x2771; Admin </button>
+            </form>
+        </div>
+
+
+
+      <div class="container-md">
+         
+
+          <img src="{{url_for('static' , filename = 'img/plate.jpg')}}" width="15%"/>
+          <p> Example of License Plate (Input) </p>
+        </div>
+    
+      <div class="text-center">
+        <form action = '/add_plate/' method="post" name = "add_plate">
+
+          <div >
+            <input type="text" class="" id="add_plate" placeholder="License Plate" name = "add_plate">
+          </div>
+          <div >
+            <button type="submit" class="btn btn-primary mt-3">Add</button>
+          </div>
+        </form>
+      </div>
+    
+
+    </div>
+{% endblock %}
