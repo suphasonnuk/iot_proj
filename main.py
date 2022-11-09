@@ -31,6 +31,14 @@ def load_plate(user_id):
     query_cur.execute(get_plates,[user_id])
     plates = query_cur.fetchall()
     return plates
+def get_all_data():
+    get_all_user = ("SELECT user_id,user_name,house_num,user_email FROM data_user")
+    query_cur.execute(get_all_user)
+    all_user = query_cur.fetchall()
+    get_all_plates = ("SELECT data_user.user_name,data_car.car_license_str FROM data_user JOIN data_car ON data_car.user_id = data_user.user_id")
+    query_cur.execute(get_all_plates)
+    all_plates = query_cur.fetchall()
+    return all_user,all_plates
 
 
 
@@ -101,9 +109,7 @@ def delete_names():
 
 @app.route('/delete_plates/' , methods = ['POST' , 'GET'])
 def delete_plates():
-    global _login , data_use
-    _login = False
-    data_use = None
+    print(request.form.get("admin_delete"))
     return redirect(url_for("login_page"))
 
 @app.route('/logout/' , methods = ['POST' , 'GET'])
@@ -120,12 +126,14 @@ def logout():
 
 @app.route('/home/' , methods = ['POST' , 'GET'])
 def home():
+    global _login
+    _login = False
     return redirect(url_for("index"))
 
 @app.route('/edit/' , methods = ['POST' , 'GET'])
 def edit():
-    
-    return render_template("admin_edit.html" , personal = data_recieved.values.tolist(), _plates = plates.values.tolist())
+    all_users,all_plates = get_all_data()
+    return render_template("admin_edit.html" , personal = all_users, _plates = all_plates)
 
 
 @app.route('/add_plate/' , methods = ['POST' , 'GET'])
@@ -178,7 +186,8 @@ def admin_page():
     global login_role
     if (_login):
         if (login_role == "admin"):
-            return render_template("admin_page.html" , personal = "", _plates = [])  
+            all_users,all_plates = get_all_data()
+            return render_template("admin_page.html" , personal = all_users, _plates = all_plates)  
         else:
             return render_template("login_error.html")
     else:
