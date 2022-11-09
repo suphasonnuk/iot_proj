@@ -133,18 +133,10 @@ def add_plate():
     global plates,login_id
     print(login_id)
     if request.method == "POST":
-        # _plates = pd.DataFrame({
-        #     "user_name" : [data_use[0][0]],
-        #     "user_plates" : [request.form.get("add_plate")],
-        # })
-        ## add plate 
         plates = load_plate(login_id)
         plate = request.form.get("add_plate")
         print(plates)
         if (plate,) not in plates:
-            # user_plates.append(request.form.get("add_plate"))
-            # plates = pd.concat([plates, _plates])
-            # plates.index = range(len(user_plates))
             insert_plate = ("INSERT INTO data_car (user_id,car_license_str) VALUES (%s,%s)") 
             insert_data = [login_id,plate]
             db_cur.execute(insert_plate,insert_data)
@@ -167,17 +159,12 @@ def delete_plate():
     plates = load_plate(login_id)
     if request.method == "POST": 
         data = request.form.get('delete_plate') 
-        plate_seleted = data
-        # user_plates.remove(data)
-        print(plate_seleted)
         delete_user = ("DELETE FROM data_car WHERE car_license_str = %s")
-        # usr2del = [request.form.get('delete_plate')]
         db_cur.execute(delete_user,[data])
         add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
         log_data = [login_id,"delete plate \'"+data+"\'"]
         db_cur.execute(add_log,log_data) 
         db.commit()
-        # plates.drop(plates[plates["user_plates"] == plate_seleted].index , inplace=True)
         plates = load_plate(login_id)
         return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)     
     else:
