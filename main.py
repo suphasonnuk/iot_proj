@@ -25,9 +25,12 @@ def pwd_encoding(password):
     md5_pass = hashlib.md5(password.encode())
     return md5_pass.hexdigest()
 
-# def load_plate():
-#     print("loading plates")
-#     plates_list = []
+def load_plate(user_id):
+    print("loading plates...")
+    get_plates = ("SELECT car_license_str FROM data_car WHERE user_id = %s")
+    query_cur.execute(get_plates,[user_id])
+    plates = query_cur.fetchall()
+    return plates
 
 # data_use = None
 # license_img = None
@@ -149,44 +152,53 @@ def edit():
 
 @app.route('/add_plate/' , methods = ['POST' , 'GET'])
 def add_plate():
-    global plates
+    global plates,login_id
+    print(login_id)
     if request.method == "POST":
-        _plates = pd.DataFrame({
-            "user_name" : [data_use[0][0]],
-            "user_plates" : [request.form.get("add_plate")],
-        })
-        ## add plate here
-
-        if request.form.get("add_plate") not in plates.loc[plates["user_name"] == data_use[0][0] , "user_plates"].values:
-            user_plates.append(request.form.get("add_plate"))
-            plates = pd.concat([plates, _plates])
-            plates.index = range(len(user_plates))
-
-
-            return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email,personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
+        # _plates = pd.DataFrame({
+        #     "user_name" : [data_use[0][0]],
+        #     "user_plates" : [request.form.get("add_plate")],
+        # })
+        ## add plate 
+        plates = load_plate(login_id)
+        plate = request.form.get("add_plate")
+        if plate not in plates:
+            # user_plates.append(request.form.get("add_plate"))
+            # plates = pd.concat([plates, _plates])
+            # plates.index = range(len(user_plates))
+            insert_plate = ("INSERT INTO data_car (user_id,car_license_str) VALUES (%s,%s)") 
+            insert_data = [login_id,plate]
+            print(insert_data)
+            db_cur.execute(insert_plate,insert_data)
+            add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
+            log_data = [login_id,"add plate"+plate]
+            db_cur.execute(add_log,log_data)
+            db.commit() 
+            print("add plates successfully")
+            plates = load_plate(login_id)
+            return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)
         flash("You already added that plate")
-        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email,personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
-
+        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email,_plates = plates)
     else:
-        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email,personal = data_use[0], _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())
+        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)
 
 @app.route('/delete_plate/' , methods = ['POST' , 'GET'])
 def delete_plate():
-
+    plates = load_plate(login_id)
     if request.method == "POST": 
         data = request.form.get('delete_plate') 
         plate_seleted = data
         # user_plates.remove(data)
         delete_user = ("DELETE FROM data_car WHERE  car_license_str = %s")
-        # usr2del = (request.form.get('delete_plate'))
-        db_cur.execute(delete_user,data)
+        # usr2del = [request.form.get('delete_plate')]
+        db_cur.execute(delete_user,[data])
         db.commit()
-        plates.drop(plates[plates["user_plates"] == plate_seleted].index , inplace=True)
-        
-        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, personal = data_use[0] , _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())     
+        print("plate",data,"deleted")
+        # plates.drop(plates[plates["user_plates"] == plate_seleted].index , inplace=True)
+        plates = load_plate(login_id)
+        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)     
     else:
-        return render_template("Dashboard.html" , user_name = login_name, personal = data_use[0] ,
-         _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())     
+        return render_template("Dashboard.html" , user_name = login_name, house_um = login_house,user_email = login_email,_plates = plates)     
     
     
 
@@ -212,22 +224,23 @@ def login():
         get_user = [request.form.get("user_name"),pwd_encoding(request.form.get("user_password"))]
         query_cur.execute(chk_login,get_user) 
         login_result = query_cur.fetchall()
-        login_result = login_result[0]
         if (len(login_result) != 0):
             flash("log in successful")
-            login_id =  login_result[0]
-            login_name = login_result[1]
-            login_role = login_result[7]
-            login_house = login_result[3]
-            login_email = login_result[4]
+            login_id =  login_result[0][0]
+            login_name = login_result[0][1]
+            login_role = login_result[0][7]
+            login_house = login_result[0][3]
+            login_email = login_result[0][4]
             add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
             log_data = [login_id,"login"]
             db_cur.execute(add_log,log_data)
             db.commit()
             _login = True
-            return render_template("Dashboard.html" ,user_name = login_name, house_num = login_house,user_email = login_email, _plates = [])
+            plates = load_plate(login_id)
+            return render_template("Dashboard.html" ,user_name = login_name, house_num = login_house,user_email = login_email, _plates = plates)
         else:
-            flash("Your user name is not in our DataBase, try again")
+            flash("Please check your username and password, try again.")
+            return render_template("login.html")
 
     if request.method == "GET":
             
@@ -237,9 +250,10 @@ def login():
 
 @app.route('/login_page/', methods = ['POST' , 'GET'])
 def login_page():
-    global  visiblility , _login,login_name,login_house,login_email
+    global  visiblility , _login,login_name,login_house,login_email,login_id
     if (_login):
-        return render_template("Dashboard.html" , user_name = login_name,house_num=login_house,user_email=login_email, _plates = plates.loc[plates['user_name'] == data_use[0][0]].values.tolist())     
+        plates = load_plate(login_id)
+        return render_template("Dashboard.html" , user_name = login_name,house_num=login_house,user_email=login_email, _plates = plates)     
     else:
         return render_template("login.html")
 
