@@ -32,28 +32,6 @@ def load_plate(user_id):
     plates = query_cur.fetchall()
     return plates
 
-# data_use = None
-# license_img = None
-
-# user_plates = []
-# user_email = []
-# error = None
-# user_password = []
-# grey=0
-# neg=0
-# face=0
-# switch=1
-# rec=0
-# plates = pd.DataFrame({
-#             "user_name" : user_name,
-#             "user_plates" : user_plates,
-#         })
-# data_recieved = pd.DataFrame({
-#             "user_name" : user_name,
-#             "user_id" : user_id,
-#             "user_password" : user_password,
-#             "user_email" : user_email
-#         ,})
 
 
 login_id = None
@@ -162,23 +140,25 @@ def add_plate():
         ## add plate 
         plates = load_plate(login_id)
         plate = request.form.get("add_plate")
-        if plate not in plates:
+        print(plates)
+        if (plate,) not in plates:
             # user_plates.append(request.form.get("add_plate"))
             # plates = pd.concat([plates, _plates])
             # plates.index = range(len(user_plates))
             insert_plate = ("INSERT INTO data_car (user_id,car_license_str) VALUES (%s,%s)") 
             insert_data = [login_id,plate]
-            print(insert_data)
             db_cur.execute(insert_plate,insert_data)
             add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
-            log_data = [login_id,"add plate"+plate]
+            log_data = [login_id,"add plate \'"+plate+"\'"]
             db_cur.execute(add_log,log_data)
             db.commit() 
             print("add plates successfully")
             plates = load_plate(login_id)
             return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)
-        flash("You already added that plate")
-        return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email,_plates = plates)
+        else:
+            print("this run")
+            flash("You already added that plate")
+            return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)
     else:
         return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)
 
@@ -189,11 +169,14 @@ def delete_plate():
         data = request.form.get('delete_plate') 
         plate_seleted = data
         # user_plates.remove(data)
-        delete_user = ("DELETE FROM data_car WHERE  car_license_str = %s")
+        print(plate_seleted)
+        delete_user = ("DELETE FROM data_car WHERE car_license_str = %s")
         # usr2del = [request.form.get('delete_plate')]
         db_cur.execute(delete_user,[data])
+        add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
+        log_data = [login_id,"delete plate \'"+data+"\'"]
+        db_cur.execute(add_log,log_data) 
         db.commit()
-        print("plate",data,"deleted")
         # plates.drop(plates[plates["user_plates"] == plate_seleted].index , inplace=True)
         plates = load_plate(login_id)
         return render_template("Dashboard.html" , user_name = login_name,house_num = login_house,user_email = login_email, _plates = plates)     
@@ -208,7 +191,7 @@ def admin_page():
     global login_role
     if (_login):
         if (login_role == "admin"):
-            return render_template("admin_page.html" , personal = "", _plates = plates.values.tolist())  
+            return render_template("admin_page.html" , personal = "", _plates = [])  
         else:
             return render_template("login_error.html")
     else:
