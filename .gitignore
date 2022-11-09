@@ -3,3 +3,4 @@ templates/test.html
 IOT_PROJ
 ./shorts
 ./saved_model
+test_sql.py
