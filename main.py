@@ -133,6 +133,14 @@ def home():
 @app.route('/edit/' , methods = ['POST' , 'GET'])
 def edit():
     all_users,all_plates = get_all_data()
+    if request.method == "POST":
+        print(request.form.get("button-name"))
+        print(request.form.get("add_name"))
+        print(request.form.get("button_license"))
+        print(request.form.get("plate_delete"))
+
+        print(">>>>>>>>>>>>>>>>>>>>>>>>")
+        print(request.form.get("button-name-license"))
     return render_template("admin_edit.html" , personal = all_users, _plates = all_plates)
 
 
