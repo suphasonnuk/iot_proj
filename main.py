@@ -112,6 +112,10 @@ def delete_plates():
     print(request.form.get("admin_delete"))
     return redirect(url_for("login_page"))
 
+@app.route('/history/' , methods = ['GET'])
+def history():
+    return render_template("history.html")
+
 @app.route('/logout/' , methods = ['POST' , 'GET'])
 def logout():
     global _login , data_use,login_id
