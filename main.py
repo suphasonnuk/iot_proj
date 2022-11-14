@@ -26,7 +26,7 @@ def pwd_encoding(password):
     return md5_pass.hexdigest()
 
 def load_plate(user_id):
-    print("loading plates...")
+    # print("loading plates...")
     get_plates = ("SELECT car_license_str FROM data_car WHERE user_id = %s")
     query_cur.execute(get_plates,[user_id])
     plates = query_cur.fetchall()
@@ -39,7 +39,6 @@ def get_all_data():
     query_cur.execute(get_all_plates)
     all_plates = query_cur.fetchall()
     return all_user,all_plates
-
 
 
 login_id = None
@@ -96,25 +95,69 @@ def register():
 
     return render_template("register.html")
 
-@app.route('/delete_names/' , methods = ['POST' , 'GET'])
-def delete_names():
-    global _login , data_use
-    delete_user = ("DELETE FROM data_user WHERE  user_name = %s")
-    usr2del = [request.form.get('user_name')]
-    db_cur.execute(delete_user,usr2del)
-    db.commit()
-    _login = False
-    data_use = None
-    return redirect(url_for("login_page"))
+@app.route('/admin_delete_plate/' , methods = ['POST' , 'GET'])
+def admin_delete_plate():
+    if request.method == "POST":
+        data = request.form.get('plate_delete') 
+        delete_user = ("DELETE FROM data_car WHERE car_license_str = %s")
+        db_cur.execute(delete_user,[data])
+        add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
+        log_data = [login_id,"delete plate \'"+data+"\'"]
+        db_cur.execute(add_log,log_data) 
+        db.commit()
+    return redirect(url_for("edit"))
 
-@app.route('/delete_plates/' , methods = ['POST' , 'GET'])
-def delete_plates():
-    print(request.form.get("admin_delete"))
-    return redirect(url_for("login_page"))
+@app.route('/delete_account/' , methods = ['POST' , 'GET'])
+def delete_account():
+    if request.method == "POST":
+        delete_account = ("DELETE FROM data_user WHERE user_name = %s")
+        db_cur.execute(delete_account,[request.form.get("button-name")])
+        add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
+        log_data = [login_id,"Delete user \'"+request.form.get("button-name")+"\'"]
+        db_cur.execute(add_log,log_data)
+        db.commit()
+    return redirect(url_for("edit"))
 
-@app.route('/history/' , methods = ['GET'])
+@app.route('/admin_add_plate/' , methods = ['POST' , 'GET'])
+def admin_add_plate():
+    if request.method == "POST":
+        get_user_id = ("SELECT user_id FROM data_user WHERE user_name = %s")
+        query_cur.execute(get_user_id,[request.form.get("button-name-license")])
+        user_id = query_cur.fetchall()
+        add_plate = ("INSERT INTO data_car (user_id,car_license_str) VALUES (%s,%s)") 
+        data_add = [user_id[0][0],request.form.get("button_license")] 
+        db_cur.execute(add_plate,data_add)
+        add_log=("INSERT INTO user_log (user_id,user_action,user_time_stamp) VALUES (%s,%s,CURRENT_TIMESTAMP)")
+        log_data = [login_id,"Add plate"+request.form.get("button_license")+"to user \'"+request.form.get("button-name-license")+"\'"]
+        db_cur.execute(add_log,log_data)
+        db.commit()
+    return redirect(url_for("edit"))
+
+
+@app.route('/history/' , methods = ['GET','POST'])
 def history():
-    return render_template("history.html")
+    global login_role,_login
+    if(login_role == "admin" and _login == True):
+        get_log_data = ("SELECT user_log.user_id,data_user.user_name,user_log.user_action,user_log.user_time_stamp FROM user_log JOIN data_user ON user_log.user_id = data_user.user_id")
+        query_cur.execute(get_log_data)
+        result = query_cur.fetchall()
+        return render_template("history.html",logger = result )
+    else:
+        _login = False
+        return render_template("login_error.html")
+@app.route('/gate_history/', methods = ['GET','POST'])
+def gate_history():
+    global login_role,_login 
+    if(login_role == "admin" and _login == True):
+        print("access to gate history")
+        get_gate_log_data = ("SELECT data_user.user_name,data_car.car_license_str,gate_log.gate_action,gate_log.gate_time_stamp FROM gate_log JOIN data_car ON gate_log.car_id = data_car.car_id JOIN data_user ON data_car.user_id = data_user.user_id")
+        query_cur.execute(get_gate_log_data)
+        result = query_cur.fetchall()
+        print(result)
+        return render_template("gate_history.html",gate_log = result)
+    else:
+        _login = False
+        return render_template("login_error.html")
 
 @app.route('/logout/' , methods = ['POST' , 'GET'])
 def logout():
@@ -138,6 +181,7 @@ def home():
 def edit():
     all_users,all_plates = get_all_data()
     if request.method == "POST":
+        
         print(request.form.get("button-name"))
         print(request.form.get("add_name"))
         print(request.form.get("button_license"))
@@ -195,12 +239,13 @@ def delete_plate():
 
 @app.route('/admin_page/', methods = ['POST' , 'GET'])
 def admin_page():
-    global login_role
+    global login_role,_login
     if (_login):
         if (login_role == "admin"):
             all_users,all_plates = get_all_data()
             return render_template("admin_page.html" , personal = all_users, _plates = all_plates)  
         else:
+            _login = False
             return render_template("login_error.html")
     else:
         return render_template("login_error.html")

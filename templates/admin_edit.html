@@ -2,8 +2,9 @@
 
 
 {% block content %}
-<form method="POST" , action = "/edit/" , name = "admin_form" , id = "admin_form">
+
 <div class="container-lg mt-5">
+  <form method="POST" , action = "/delete_account/" , name = "admin_form" , id = "admin_form">
     <div class="input-group mb-3">
         <button class="btn btn-outline-danger" type="submit" id="button-delete">Delete Account</button>
 
@@ -18,15 +19,15 @@
 
           </select>
       </div>
-      
-      
+  </form>
+
       <div class="input-group mb-3">
         <input name= "add_name" id= "add_name" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
         <button class="btn btn-outline-primary" type="submit" id="button-addon2">Add Name</button>
       </div>
 
+      <form method = "POST", action = "/admin_add_plate/" , name="admin_add_plate", id = "admin_add_plate">
       <div class="row">
-      
         <div class="input-group mb-3 col">
           <button class="btn btn-outline-secondary" type="submit">Add License Plate</button>
           <input name = "button_license" id = "button_license" type="text" class="form-control" placeholder="" aria-label="Example text with two button addons">
@@ -45,24 +46,24 @@
 
             </select>
             <label class="mx-3" id="button-delete">Select Account name</label>
-        </div>
-
+          </div>
       </div>
+    </form>
 
 
-      
+    <form method="POST" , action = "/admin_delete_plate/" , name = "admin_form_delete_plate" , id = "admin_form_delete_plate">
       <div class="input-group">
         <select class="form-select" aria-label="Default select example" name = "plate_delete" id = "plate_delete">
             <option selected>Select Plates</option>
             {%for data in _plates%}
    
-            <option value="1">{{data[1]}}</option>
+            <option value="{{data[1]}}">{{data[1]}}</option>
    
             {%endfor%}
 
           </select>
         <button class="btn btn-outline-danger" type="submit">Delete License Plate</button>
       </div>
+    </form>
 </div>
-</form>
 {% endblock %}
