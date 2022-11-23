@@ -4,3 +4,4 @@ IOT_PROJ
 ./shorts
 ./saved_model
 test_sql.py
+\__pycache__

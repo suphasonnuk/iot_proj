@@ -181,14 +181,14 @@ def home():
 def edit():
     all_users,all_plates = get_all_data()
     if request.method == "POST":
-        
-        print(request.form.get("button-name"))
-        print(request.form.get("add_name"))
-        print(request.form.get("button_license"))
-        print(request.form.get("plate_delete"))
+        pass 
+        # print(request.form.get("button-name"))
+        # print(request.form.get("add_name"))
+        # print(request.form.get("button_license"))
+        # print(request.form.get("plate_delete"))
 
-        print(">>>>>>>>>>>>>>>>>>>>>>>>")
-        print(request.form.get("button-name-license"))
+        # print(">>>>>>>>>>>>>>>>>>>>>>>>")
+        # print(request.form.get("button-name-license"))
     return render_template("admin_edit.html" , personal = all_users, _plates = all_plates)
 
 
@@ -294,5 +294,7 @@ def login_page():
         return render_template("login.html")
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', port = 5000 , debug=True)
+    # from waitress import serve
+    # serve(app,host='0.0.0.0',port=5000)
+    app.run('0.0.0.0', port = 5000 , debug=False)
     db.close 
