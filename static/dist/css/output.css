@@ -1,0 +1,138 @@
+h1{
+  color: aqua;
+}
+
+p{
+  color: burlywood;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  text-align: center;
+}
+
+#lab_pict{
+  border: 2px #2c3444 solid;
+  border-radius: 2px;
+  border-color: #2c3444;
+}
+
+.center-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.sad{
+  color: whitesmoke;
+}
+
+.container-vid{
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  border: 2px #2c3444 solid;
+  border-radius: 5px;
+  border-color: #2c3444;
+}
+
+.button:hover{
+  background-color: #88a88b;
+  color: white;
+}
+
+.vid{
+  border: 1px #2c3444 solid;
+  border-color: #2c3444;
+}
+
+.logo{
+  border: 2px solid black;
+}
+
+.navcol{
+  color:blanchedalmond;
+}
+
+body{
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+nav{
+  background-color: #2c3444;
+}
+
+nav li a[herf]{
+  color:burlywood;
+}
+
+#home {
+  -webkit-clip-path: url(#cache);
+          clip-path: url(#cache);
+}
+
+#red {
+  fill: none;
+  opacity: 0.15;
+  stroke: #CE1B5F;
+  stroke-width: 12;
+  stroke-miterlimit:10;
+  animation: show 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+#blue {
+  fill: none;
+  opacity: 0.15;
+  stroke: #06A1C4;
+  stroke-width: 12;
+  stroke-miterlimit:10;
+  animation: show 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+#light-blue {
+  fill: none;
+  opacity: 0.15;
+  stroke: #06A1C4;
+  stroke-width: 6;
+  stroke-miterlimit:10;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 800;
+  animation: draw 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0.15;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.15;
+  }
+}
+
+.backg{
+  background-image: url('/static/img/background.svg');
+}
