@@ -15,9 +15,9 @@ import hashlib
 
 app = Flask(__name__)
 
-# db = mysql.connector.connect(host="localhost",username="root",password = '',database='license_plate_rec')
-# db_cur = db.cursor()
-# query_cur = db.cursor()
+db = mysql.connector.connect(host="localhost",username="root",password = '',database='license_plate_rec')
+db_cur = db.cursor()
+query_cur = db.cursor()
 
 app.secret_key = "abc"  
 
