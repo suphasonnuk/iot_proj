@@ -12,25 +12,34 @@
 
     <div class="container-lg center-screen text-center pb-5">
 
+      <div class="max-w-sm rounded overflow-hidden shadow-lg px-5 py-5">
         <h2 class= "text-center font-weight-bold"> Welcome to Registering / Managing system  </h2>
-      <div class="container-md mt-3 rounded">
-          <form action="{{url_for('login_page')}}">
-             <button class="btn btn-primary px-5"> login </button>
-          </form>
-      </div>  
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">presented by IVACS</div>      
+        </div>
 
-      <div>
-        <form action = "{{url_for('registering')}}">
-          <button class="btn btn-secondary px-3 mt-3"> Register (First time use) </button>
-          </form>
-      </div>
-
-        <div class="container-md mt-3 mb-3 rounded px-3">
-            <form action="{{url_for('admin_page')}}">
-               <button class="btn btn-success"> See Activities log (For admin_page) </button>
+      <div class="flexbox_container">
+        <div class="container">
+            <form action="{{url_for('login_page')}}">
+              <button class="btn btn-primary px-5 py-3"> login </button>
             </form>
         </div>  
+
+        <div class="container">
+          <form action = "{{url_for('registering')}}">
+            <button class="btn btn-secondary"> Register (First time use) </button>
+            </form>
+        </div>
+
+          <div class="container rounded ">
+              <form action="{{url_for('admin_page')}}">
+                <button class="btn btn-success px-auto"> See Activities log (For admin_page) </button>
+              </form>
+          </div>  
+        </div>
     </div>
+    </div>
+
   {% endblock %}
 
 </body>

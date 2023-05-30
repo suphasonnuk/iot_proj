@@ -68,13 +68,13 @@ def register():
 
         else:
             #request for plates files.
-            uploaded_file = request.files['user_lisense']
-            if uploaded_file.filename != '':
-                os.chdir(os.path.join( os.path.join(os.getcwd() , "shots")))
-                ext = os.path.splitext(uploaded_file.filename)[-1].lower()
+            # uploaded_file = request.files['user_lisense']
+            # if uploaded_file.filename != '':
+            #     os.chdir(os.path.join( os.path.join(os.getcwd() , "shots")))
+            #     ext = os.path.splitext(uploaded_file.filename)[-1].lower()
                 
-                if ext == ".jpg" or ".png":
-                    uploaded_file.save(uploaded_file.filename)
+            #     if ext == ".jpg" or ".png":
+            #         uploaded_file.save(uploaded_file.filename)
 
             user_query = ("SELECT 'user_name' FROM data_user WHERE user_name = (%s)")
             query_cur.execute(user_query,[request.form.get('user_name')])

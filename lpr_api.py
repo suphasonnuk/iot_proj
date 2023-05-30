@@ -24,20 +24,17 @@ def read_root():
     return {"Nothing: page"}
 
 @app.get("/plate_check/{text}")
-
 def read_plate(text: str):
     global plate_found
-    #มึงก็ check plate via database ไรก็ได้ตรงนี้
-    #example: 
+    print(text)
     sql_search = ("SELECT data_user.user_name,data_user.house_num,data_car.car_id,data_car.car_license_str FROM data_car JOIN data_user ON data_car.user_id = data_user.user_id WHERE car_license_str = %s")
     db_cur.execute(sql_search,[text])
-    result = db_cur.fetchall()
-    add_log=("INSERT INTO `gate_log`(`car_id`, `gate_action`, `gate_time_stamp`) VALUES (%s,%s,CURRENT_TIMESTAMP)")
-    log_data = [result[0][2],"enter/exit"]
-    db_cur.execute(add_log,log_data)
-    db.commit()
+    result = db_cur.fetchall() 
     if (len(result) != 0):
-        return {"Text": "True"}
+        add_log=("INSERT INTO `gate_log`(`car_id`, `gate_action`, `gate_time_stamp`) VALUES (%s,%s,CURRENT_TIMESTAMP)")
+        log_data = [result[0][2],"enter/exit"]
+        db_cur.execute(add_log,log_data)
+        db.commit()
+        return True
     else:
-        return {"Text": "False"}
-
+        return False

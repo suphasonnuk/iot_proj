@@ -1,5 +1,14 @@
 h1{
   color: aqua;
+
+}
+
+
+.button_line_horizontal{
+
+  flex-direction: row;
+  flex: content;
+  
 }
 
 p{
@@ -44,9 +53,11 @@ p{
   color: white;
 }
 
-.vid{
-  border: 1px #2c3444 solid;
-  border-color: #2c3444;
+
+.flexbox_container{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
 }
 
 .logo{
@@ -133,6 +144,4 @@ nav li a[herf]{
   }
 }
 
-.backg{
-  background-image: url('/static/img/background.svg');
-}
+
