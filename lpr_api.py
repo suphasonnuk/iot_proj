@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 import mysql.connector
 db = mysql.connector.connect(host="localhost",username="root",password = '',database='license_plate_rec')
 db_cur = db.cursor()
@@ -38,3 +39,6 @@ def read_plate(text: str):
         return True
     else:
         return False
+if __name__ == "__main__":
+    uvicorn.run("lpr_api:app", host="0.0.0.0", port=5050, log_level="info")
+    # uvicorn lpr_api:app --host 0.0.0.0 --port 5050
